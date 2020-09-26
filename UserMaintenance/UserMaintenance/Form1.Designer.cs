@@ -50,9 +50,8 @@
             this.lblLastName.AutoSize = true;
             this.lblLastName.Location = new System.Drawing.Point(462, 39);
             this.lblLastName.Name = "lblLastName";
-            this.lblLastName.Size = new System.Drawing.Size(76, 17);
+            this.lblLastName.Size = new System.Drawing.Size(0, 17);
             this.lblLastName.TabIndex = 1;
-            this.lblLastName.Text = "Last Name";
             // 
             // txtLastName
             // 
@@ -67,7 +66,6 @@
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(328, 46);
             this.btnAdd.TabIndex = 3;
-            this.btnAdd.Text = "Add";
             this.btnAdd.UseVisualStyleBackColor = true;
             this.btnAdd.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -76,9 +74,8 @@
             this.lblFirstName.AutoSize = true;
             this.lblFirstName.Location = new System.Drawing.Point(462, 88);
             this.lblFirstName.Name = "lblFirstName";
-            this.lblFirstName.Size = new System.Drawing.Size(76, 17);
+            this.lblFirstName.Size = new System.Drawing.Size(0, 17);
             this.lblFirstName.TabIndex = 4;
-            this.lblFirstName.Text = "First Name";
             // 
             // txtFirstName
             // 
