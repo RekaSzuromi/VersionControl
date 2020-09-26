@@ -83,7 +83,7 @@ namespace UserMaintenance {
         /// </summary>
         internal static string Write_to_file {
             get {
-                return ResourceManager.GetString("Write to file", resourceCulture);
+                return ResourceManager.GetString("Write_to_file", resourceCulture);
             }
         }
     }
