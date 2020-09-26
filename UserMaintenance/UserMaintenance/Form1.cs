@@ -54,5 +54,11 @@ namespace UserMaintenance
             saveFileDialog1.Title = "Save a file";
             saveFileDialog1.ShowDialog();
         }
+
+        private void delete_Click(object sender, EventArgs e)
+        {
+            listUsers.Items.RemoveAt(listUsers.Items.Count - 1);
+            
+        }
     }
 }
