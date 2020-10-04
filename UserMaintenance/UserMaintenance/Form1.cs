@@ -116,7 +116,7 @@ namespace UserMaintenance
         }
         private void LoadData()
         {
-            Flats = context.Flats.ToList();
+            Flats = context.Flat.ToList();
         }
         private void CreateExcel()
         {
@@ -152,40 +152,41 @@ namespace UserMaintenance
                 xlWB = null;
                 xlApp = null;
             }
-            private void Form1_Load(object sender, EventArgs e)
+            
+        }
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var u = new User()
             {
+                FullName = txtFullName.Text,
+                //FirstName = txtFirstName.Text
+            };
+            users.Add(u);
+        }
 
-            }
+        private void txtLastName_TextChanged(object sender, EventArgs e)
+        {
 
-            private void button1_Click(object sender, EventArgs e)
-            {
-                var u = new User()
-                {
-                    FullName = txtFullName.Text,
-                    //FirstName = txtFirstName.Text
-                };
-                users.Add(u);
-            }
+        }
 
-            private void txtLastName_TextChanged(object sender, EventArgs e)
-            {
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
+            saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveFileDialog1.Title = "Save a file";
+            saveFileDialog1.ShowDialog();
+        }
 
-            }
-
-            private void button1_Click_1(object sender, EventArgs e)
-            {
-                SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-                saveFileDialog1.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
-                saveFileDialog1.Title = "Save a file";
-                saveFileDialog1.ShowDialog();
-            }
-
-            private void delete_Click(object sender, EventArgs e)
-            {
-                listUsers.Items.RemoveAt(listUsers.Items.Count - 1);
+        private void delete_Click(object sender, EventArgs e)
+        {
+            listUsers.Items.RemoveAt(listUsers.Items.Count - 1);
 
 
-            }
         }
     }
 }
