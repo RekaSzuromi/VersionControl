@@ -60,22 +60,44 @@ namespace UserMaintenance
              "Ár (mFt)",
              "Négyzetméter ár (Ft/m2)"
             };
+            for (int i = 0; i < headers.Length; i++) 
+            {
+                xlSheet.Cells[1, i+1] = headers[i];
 
-            xlSheet.Cells[1, 1] = headers[0];
+            }
+
+            
             object[,] values = new object[Flats.Count, headers.Length];
 
             int counter = 0;
             foreach (Flat f in Flats)
             {
                 values[counter, 0] = f.Code;
-                // ...
-                values[counter, 8] = "";
+                values[counter, 1] = f.Vendor;
+                values[counter, 2] = f.Side;
+                values[counter, 3] = f.District;
+                string x;
+                if (f.Elevator)
+                {
+                    x = "Van";
+                }
+                else 
+                {
+                    x = "Nincs";
+                
+                }
+                values[counter, 4] = x;
+                values[counter, 5] = f.NumberOfRooms;
+                values[counter, 6] = f.FloorArea;
+                values[counter, 7] = f.Price;
+                values[counter, 8] = "=" + GetCell(counter + 2, 8) + "/" + GetCell(counter + 2, 7) + "*1000000";
                 counter++;
                 values[counter, 9] = "=SUM(GetCell(2, 1) + GetCell(2,2)";
             }
             xlSheet.get_Range(
              GetCell(2, 1),
              GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+            
 
             Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
             headerRange.Font.Bold = true;
