@@ -8,15 +8,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UserMaintenance.Entities;
+using Excel = Microsoft.Office.Interop.Excel;
+using System.Reflection;
+using System.Data.Entity.Migrations.Model;
+using Microsoft.Office.Interop.Excel;
 
 namespace UserMaintenance
 {
-
-    using Excel = Microsoft.Office.Interop.Excel;
-    using System.Reflection;
-    using System.Data.Entity.Migrations.Model;
-    using Microsoft.Office.Interop.Excel;
-
 
     public partial class Form1 : Form
     {
@@ -41,15 +39,57 @@ namespace UserMaintenance
             listUsers.DisplayMember = "FullName";
             LoadData();
             CreateExcel();
-            CreateTable();
+            //CreateTable();
 
         }
+        private void LoadData()
+        {
+            Flats = context.Flat.ToList();
+        }
+        private void CreateExcel()
+        {
 
+            try
+            {
+                // Excel elindítása és az applikáció objektum betöltése
+                xlApp = new Excel.Application();
+
+                // Új munkafüzet
+                xlWB = xlApp.Workbooks.Add(Missing.Value);
+
+                // Új munkalap
+                xlSheet = xlWB.ActiveSheet;
+
+                // Tábla létrehozása
+                CreateTable();
+                // Control átadása a felhasználónak
+                xlApp.Visible = true;
+                xlApp.UserControl = true;
+
+            }
+            catch (Exception ex) // Hibakezelés a beépített hibaüzenettel
+            {
+
+                string errMsg = string.Format("Error: {0}\nLine: {1}", ex.Message, ex.Source);
+                MessageBox.Show(errMsg, "Error");
+
+                // Hiba esetén az Excel applikáció bezárása automatikusan
+                xlWB.Close(false, Type.Missing, Type.Missing);
+                xlApp.Quit();
+                xlWB = null;
+                xlApp = null;
+            }
+
+        }
+        string[] headers;
+        
         private void CreateTable()
         {
 
 
-            string[] headers = new string[] {
+            //string[] headers = new string[] 
+            headers = new string[]
+            {
              "Kód",
              "Eladó",
              "Oldal",
@@ -92,90 +132,65 @@ namespace UserMaintenance
                 values[counter, 7] = f.Price;
                 values[counter, 8] = "=" + GetCell(counter + 2, 8) + "/" + GetCell(counter + 2, 7) + "*1000000";
                 counter++;
-                values[counter, 9] = "=SUM(GetCell(2, 1) + GetCell(2,2)";
+
+                xlSheet.get_Range(
+                    GetCell(2, 1),
+                    GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
+
+
+                FormatTable();
+
+
             }
-            xlSheet.get_Range(
-             GetCell(2, 1),
-             GetCell(1 + values.GetLength(0), values.GetLength(1))).Value2 = values;
-            
 
-            Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
-            headerRange.Font.Bold = true;
-            headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
-            headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
-            headerRange.EntireColumn.AutoFit();
-            headerRange.RowHeight = 40;
-            headerRange.Interior.Color = Color.LightBlue;
-            headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
-
-            int lastRowID = xlSheet.UsedRange.Rows.Count;
-            int lastColumnID = xlSheet.UsedRange.Columns.Count;
-
-            Excel.Range columnRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, 1));
-            columnRange.Interior.Color = Color.LightGoldenrodYellow;
-            columnRange.Font.Bold = true;
-            Excel.Range lastcolumnRange = xlSheet.get_Range(GetCell(1, lastColumnID), GetCell(lastRowID, lastColumnID));
-            lastcolumnRange.Interior.Color = Color.LightGreen;
-            lastcolumnRange.NumberFormat = "#,##0.00";
-            Excel.Range entireRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, lastColumnID));
-            entireRange.BorderAround2(Excel.XlLineStyle.xlContinuous, XlBorderWeight.xlMedium);
-        }
-        private string GetCell(int x, int y)
-        {
-            string ExcelCoordinate = "";
-            int dividend = y;
-            int modulo;
-
-            while (dividend > 0)
+            string GetCell(int x, int y)
             {
-                modulo = (dividend - 1) % 26;
-                ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate;
-                dividend = (int)((dividend - modulo) / 26);
+                string ExcelCoordinate = "";
+                int dividend = y;
+                int modulo;
+
+                while (dividend > 0)
+                {
+                    modulo = (dividend - 1) % 26;
+                    ExcelCoordinate = Convert.ToChar(65 + modulo).ToString() + ExcelCoordinate;
+                    dividend = (int)((dividend - modulo) / 26);
+                }
+                ExcelCoordinate += x.ToString();
+
+                return ExcelCoordinate;
             }
-            ExcelCoordinate += x.ToString();
-
-            return ExcelCoordinate;
-        }
-        private void LoadData()
-        {
-            Flats = context.Flat.ToList();
-        }
-        private void CreateExcel()
-        {
-
-            try
+            void FormatTable() 
             {
-                // Excel elindítása és az applikáció objektum betöltése
-                xlApp = new Excel.Application();
+                Excel.Range headerRange = xlSheet.get_Range(GetCell(1, 1), GetCell(1, headers.Length));
+                headerRange.Font.Bold = true;
+                headerRange.VerticalAlignment = Excel.XlVAlign.xlVAlignCenter;
+                headerRange.HorizontalAlignment = Excel.XlHAlign.xlHAlignCenter;
+                headerRange.EntireColumn.AutoFit();
+                headerRange.RowHeight = 40;
+                headerRange.Interior.Color = Color.LightBlue;
+                headerRange.BorderAround2(Excel.XlLineStyle.xlContinuous, Excel.XlBorderWeight.xlThick);
 
-                // Új munkafüzet
-                xlWB = xlApp.Workbooks.Add(Missing.Value);
+                int lastRowID = xlSheet.UsedRange.Rows.Count;
+                int lastColumnID = xlSheet.UsedRange.Columns.Count;
 
-                // Új munkalap
-                xlSheet = xlWB.ActiveSheet;
+                Excel.Range columnRange = xlSheet.get_Range(GetCell(2, 1), GetCell(lastRowID, 1));
+                columnRange.Interior.Color = Color.LightGoldenrodYellow;
+                columnRange.Font.Bold = true;
+                Excel.Range lastcolumnRange = xlSheet.get_Range(GetCell(1, lastColumnID), GetCell(lastRowID, lastColumnID));
+                lastcolumnRange.Interior.Color = Color.LightGreen;
+                lastcolumnRange.NumberFormat = "#\\ ##0.00";
+                Excel.Range entireRange = xlSheet.get_Range(GetCell(1, 1), GetCell(lastRowID, lastColumnID));
+                entireRange.BorderAround2(Excel.XlLineStyle.xlContinuous, XlBorderWeight.xlMedium);
 
-                // Tábla létrehozása
-                //CreateTable(); // Ennek megírása a következő feladatrészben következik
 
-                // Control átadása a felhasználónak
-                xlApp.Visible = true;
-                xlApp.UserControl = true;
 
             }
-            catch (Exception ex) // Hibakezelés a beépített hibaüzenettel
-            {
 
-                string errMsg = string.Format("Error: {0}\nLine: {1}", ex.Message, ex.Source);
-                MessageBox.Show(errMsg, "Error");
-
-                // Hiba esetén az Excel applikáció bezárása automatikusan
-                xlWB.Close(false, Type.Missing, Type.Missing);
-                xlApp.Quit();
-                xlWB = null;
-                xlApp = null;
-            }
             
         }
+        
+        
+        
         private void Form1_Load(object sender, EventArgs e)
         {
 
