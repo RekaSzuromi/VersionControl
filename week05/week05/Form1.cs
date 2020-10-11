@@ -109,31 +109,22 @@ namespace week05
             using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
             {
                 int szamlalo = 0;
-                // Végigmegyünk a hallgató lista elemein
+                // Végigmegyünk a nyereség lista elemein
+                sw.Write("Időszak");
+                sw.Write(";");
+                sw.Write("Nyereség");
+                sw.WriteLine();
+
+
                 foreach (var s in Nyereségek)
                 {
-                    // Egy ciklus iterációban egy sor tartalmát írjuk a fájlba
-                    // A StreamWriter Write metódusa a WriteLine-al szemben nem nyit új sort
-                    // Így darabokból építhetjük fel a csv fájl pontosvesszővel elválasztott sorait
-                    //sw.Write("Időszak");
-                    //sw.Write(";");
-                    //sw.Write("Nyereség");
-                    //sw.Write(";");
+                    
                     sw.Write(szamlalo.ToString());
                     sw.Write(";");
                     sw.Write(s.ToString());
                     sw.WriteLine(); // Ez a sor az alábbi módon is írható: sr.Write("\n");
                     szamlalo++;
                 }
-                
-                //Header try
-                
-                //string path = @"\FileName.txt";
-                //string data = File.ReadAllText(path);
-                //string withHeader = "Időszak ; Nyereség";
-                //File.WriteAllText(path,withHeader);
-
-
             }
         }
     }
