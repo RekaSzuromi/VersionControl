@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using week06.Entities;
 using week06.MnbServiceReference;
 
 namespace week06
@@ -17,6 +18,8 @@ namespace week06
         {
             InitializeComponent();
             GetExchangeRates();
+            BindingList<RateData> Rates;
+
         }
 
         private void GetExchangeRates()
@@ -44,8 +47,10 @@ namespace week06
 
         }
 
+
         private void Form1_Load(object sender, EventArgs e)
         {
+
 
         }
     }
