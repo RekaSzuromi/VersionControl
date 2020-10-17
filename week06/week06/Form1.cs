@@ -23,7 +23,16 @@ namespace week06
 
             BindingList<RateData> Rates;
             dataGridView1.DataSource = Rates;
+
+            XmlCreate();
             
+        }
+        private void XmlCreate() 
+        {
+            
+
+
+
         }
 
         private void GetExchangeRates()
@@ -49,12 +58,43 @@ namespace week06
             // Ezért a result változó valójában string típusú.
             var result = response.GetExchangeRatesResult;
 
+            // XML document létrehozása és az aktuális XML szöveg betöltése
+            var xml = new XmlDocument();
+            xml.LoadXml(result);
+
+            // Végigmegünk a dokumentum fő elemének gyermekein
+            foreach (XmlElement element in xml.DocumentElement)
+            {
+                // Létrehozzuk az adatsort és rögtön hozzáadjuk a listához
+                // Mivel ez egy referencia típusú változó, megtehetjük, hogy előbb adjuk a listához és csak később töltjük fel a tulajdonságait
+                var rate = new RateData();
+                Rates.Add(rate);
+
+                // Dátum
+                rate.Date = DateTime.Parse(element.GetAttribute("date"));
+
+                // Valuta
+                var childElement = (XmlElement)element.ChildNodes[0];
+                rate.Currency = childElement.GetAttribute("curr");
+
+                // Érték
+                var unit = decimal.Parse(childElement.GetAttribute("unit"));
+                var value = decimal.Parse(childElement.InnerText);
+                if (unit != 0)
+                    rate.Value = value / unit;
+            }
+
         }
 
 
         private void Form1_Load(object sender, EventArgs e)
         {
 
+
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
 
         }
     }
