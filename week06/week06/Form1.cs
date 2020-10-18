@@ -17,21 +17,64 @@ namespace week06
     public partial class Form1 : Form
     {
         BindingList<RateData> Rates = new BindingList<RateData>();
+        BindingList<string> Currencies = new BindingList<string>();
 
 
 
         public Form1()
         {
             InitializeComponent();
-            GetExchangeRates();
+
+            refreshData();
+            
 
             
             dataGridView1.DataSource = Rates;
 
-            XmlCreate();
-            DataOnChart();
+            
             chartRateData.DataSource = Rates;
 
+            comboBox1.DataSource = Currencies;
+            currencyLekerdezes();
+
+
+        }
+        private void refreshData() 
+        {
+            Rates.Clear();
+            GetExchangeRates();
+            XmlCreate();
+            DataOnChart();
+
+
+        }
+        private void currencyLekerdezes()
+        {
+            var mnbsrevice_c = new MNBArfolyamServiceSoapClient();
+            var request_c = new GetCurrenciesRequestBody();
+            var response_c = mnbsrevice_c.GetCurrencies(request_c);
+            var result_c = response_c.GetCurrenciesResult;
+            var xml_c = new XmlDocument();
+            xml_c.LoadXml(result_c);
+            foreach (XmlElement element in xml_c.DocumentElement) 
+            {
+                for(int i = 0; i<element.ChildNodes.Count; i++) 
+                {
+                    var ChildElement_c = (XmlElement)element.ChildNodes[i];
+                    string currency = ChildElement_c.InnerText;
+                    Currencies.Add(currency);
+                
+                
+                
+                }
+            
+            
+            
+            
+            }
+        
+        
+        
         }
         private void DataOnChart() 
         {
@@ -65,6 +108,7 @@ namespace week06
 
         private void GetExchangeRates()
         {
+            
             // A változó deklarációk jobb oldalán a "var" egy dinamikus változó típus.
             // A "var" változó az első értékadás pillanatában a kapott érték típusát veszi fel, és később nem változtatható.
             // Jelen példa első sora tehát ekvivalens azzal, ha a "var" helyélre a MNBArfolyamServiceSoapClient-t írjuk.
@@ -73,9 +117,9 @@ namespace week06
 
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = "EUR",
-                startDate = "2020-01-01",
-                endDate = "2020-06-30"
+                currencyNames = comboBox1.SelectedItem,
+                startDate = dateTimePicker1.Value,
+                endDate = dateTimePicker2.Value,
             };
 
             // Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
@@ -124,6 +168,21 @@ namespace week06
         private void chart1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+            refreshData();
+        }
+
+        private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
+        {
+            refreshData();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refreshData();
         }
     }
 }
