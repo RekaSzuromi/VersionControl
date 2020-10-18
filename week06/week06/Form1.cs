@@ -27,11 +27,6 @@ namespace week06
 
             refreshData();
             
-
-            
-            dataGridView1.DataSource = Rates;
-
-            
             chartRateData.DataSource = Rates;
 
             comboBox1.DataSource = Currencies;
@@ -43,6 +38,7 @@ namespace week06
         {
             Rates.Clear();
             GetExchangeRates();
+            dataGridView1.DataSource = Rates;
             XmlCreate();
             DataOnChart();
 
@@ -106,6 +102,7 @@ namespace week06
 
         }
 
+        string result;
         private void GetExchangeRates()
         {
             
@@ -117,9 +114,9 @@ namespace week06
 
             var request = new GetExchangeRatesRequestBody()
             {
-                currencyNames = comboBox1.SelectedItem,
-                startDate = dateTimePicker1.Value,
-                endDate = dateTimePicker2.Value,
+                currencyNames = Convert.ToString(comboBox1.SelectedItem),
+                startDate = Convert.ToString(dateTimePicker1.Value),
+                endDate = Convert.ToString(dateTimePicker2.Value),
             };
 
             // Ebben az esetben a "var" a GetExchangeRates visszatérési értékéből kapja a típusát.
