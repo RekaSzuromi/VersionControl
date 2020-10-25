@@ -12,16 +12,22 @@ using week07.Entities;
 
 namespace week07
 {
-    List<Person> Population = new List<Person>();
-    List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
-    List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
+    
 
     public partial class Form1 : Form
     {
+        List<Person> Population = new List<Person>();
+        List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
+        List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
+        Random rng = new Random(1234);
 
         public Form1()
         {
             InitializeComponent();
+            Population = GetPopulation(@"C:\Temp\nép.csv");
+            BirthProbabilities = GetBirthProbabilities(@"C:\Temp\születés.csv");
+            DeathProbabilities = GetDeathProbabilities(@"C:\Temp\halál.csv");
+
         }
 
         private void Form1_Load(object sender, EventArgs e)
