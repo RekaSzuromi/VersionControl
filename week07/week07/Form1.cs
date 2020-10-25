@@ -20,6 +20,7 @@ namespace week07
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
         Random rng = new Random(1234);
+        
 
         public Form1()
         {
@@ -27,8 +28,10 @@ namespace week07
             Population = GetPopulation(@"C:\Users\pc\AppData\Local\Temp\nép-teszt.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Users\pc\AppData\Local\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Users\pc\AppData\Local\Temp\halál.csv");
-            Szimulacio();
-
+            openFileDialog1.InitialDirectory = @"C:\Users\pc\AppData\Local\Temp\";
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.Title = "Browse Files";
+            textBox1.Text = openFileDialog1.FileName;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -136,7 +139,7 @@ namespace week07
         public void Szimulacio() 
         {
             // Végigmegyünk a vizsgált éveken
-            for (int year = 2005; year <= 2024; year++)
+            for (int year = 2005; year <= numericUpDown1.Value; year++)
             {
                 // Végigmegyünk az összes személyen
                 for (int i = 0; i < Population.Count; i++)
@@ -155,6 +158,11 @@ namespace week07
             }
 
 
+        }
+
+        private void Startbtn_Click(object sender, EventArgs e)
+        {
+            Szimulacio();
         }
     }
 }
