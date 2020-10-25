@@ -35,6 +35,7 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.label2 = new System.Windows.Forms.Label();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -73,6 +74,7 @@
             this.Browsebtn.TabIndex = 3;
             this.Browsebtn.Text = "Browse";
             this.Browsebtn.UseVisualStyleBackColor = true;
+            this.Browsebtn.Click += new System.EventHandler(this.Browsebtn_Click);
             // 
             // openFileDialog1
             // 
@@ -95,11 +97,20 @@
             this.textBox1.Size = new System.Drawing.Size(184, 22);
             this.textBox1.TabIndex = 5;
             // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(15, 51);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(773, 387);
+            this.richTextBox1.TabIndex = 6;
+            this.richTextBox1.Text = "";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Browsebtn);
@@ -124,6 +135,7 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 

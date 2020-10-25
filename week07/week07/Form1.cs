@@ -20,7 +20,9 @@ namespace week07
         List<BirthProbability> BirthProbabilities = new List<BirthProbability>();
         List<DeathProbability> DeathProbabilities = new List<DeathProbability>();
         Random rng = new Random(1234);
-        
+        List<int> NbrOfFemales = new List<int>();
+        List<int> NbrOfMales = new List<int>();
+
 
         public Form1()
         {
@@ -28,10 +30,7 @@ namespace week07
             Population = GetPopulation(@"C:\Users\pc\AppData\Local\Temp\nép-teszt.csv");
             BirthProbabilities = GetBirthProbabilities(@"C:\Users\pc\AppData\Local\Temp\születés.csv");
             DeathProbabilities = GetDeathProbabilities(@"C:\Users\pc\AppData\Local\Temp\halál.csv");
-            openFileDialog1.InitialDirectory = @"C:\Users\pc\AppData\Local\Temp\";
-            openFileDialog1.RestoreDirectory = true;
-            openFileDialog1.Title = "Browse Files";
-            textBox1.Text = openFileDialog1.FileName;
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -150,9 +149,11 @@ namespace week07
                 int nbrOfMales = (from x in Population
                                   where x.Gender == Gender.Male && x.IsAlive
                                   select x).Count();
+                NbrOfMales.Add(nbrOfMales);
                 int nbrOfFemales = (from x in Population
                                     where x.Gender == Gender.Female && x.IsAlive
                                     select x).Count();
+                NbrOfFemales.Add(nbrOfFemales);
                 Console.WriteLine(
                     string.Format("Év:{0} Fiúk:{1} Lányok:{2}", year, nbrOfMales, nbrOfFemales));
             }
@@ -162,7 +163,40 @@ namespace week07
 
         private void Startbtn_Click(object sender, EventArgs e)
         {
+            Population = GetPopulation(string.Format(@"{0}", textBox1.Text));
+            NbrOfFemales.Clear();
+            NbrOfMales.Clear();
+            richTextBox1.Clear();
             Szimulacio();
+            DisplayResults();
+        }
+
+        private void DisplayResults() 
+        {
+            for (int year = 2005; year <= numericUpDown1.Value; year++) 
+            {
+                richTextBox1.Text += "Szimulációs év: " + year +
+                                 "\n\t Fiúk: " + NbrOfMales[year - 2005] +
+                                 "\n\t Lányok: " + NbrOfFemales[year - 2005] + "\n\n";
+            
+            }
+        
+        
+        
+        }
+
+        private void Browsebtn_Click(object sender, EventArgs e)
+        {
+            openFileDialog1.InitialDirectory = @"C:\Users\pc\AppData\Local\Temp\nép-teszt.csv";
+            openFileDialog1.RestoreDirectory = true;
+            openFileDialog1.Title = "Browse Files";
+            //textBox1.Text = openFileDialog1.FileName;
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                textBox1.Text = openFileDialog1.FileName;
+            }
+
         }
     }
 }
