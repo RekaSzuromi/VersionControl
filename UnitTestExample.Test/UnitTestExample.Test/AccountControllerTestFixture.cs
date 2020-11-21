@@ -13,7 +13,12 @@ namespace UnitTestExample.Test
             TestCase("abcd1234", false),
             TestCase("irf@uni-corvinus", false),
             TestCase("irf.uni-corvinus.hu", false),
-            TestCase("irf@uni-corvinus.hu", true)
+            TestCase("irf@uni-corvinus.hu", true),
+            TestCase("abcde", false),
+            TestCase("ABCD4", false),
+            TestCase("abcd2", false),
+            TestCase("a1", false),
+            TestCase("aBcD1234", true)
         ]
         public void TestValidateEmail(string email, bool expectedResult)
         {
